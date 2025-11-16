@@ -9,7 +9,7 @@ namespace LeaveManagement.Domain.Entities
 {
     public class WorkLeaveRequest : BaseEntity
     {
-        public string EmployeeId { get; set; } = null!;
+        public int EmployeeId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public LeaveStatus Status { get; set; } = LeaveStatus.Pending;

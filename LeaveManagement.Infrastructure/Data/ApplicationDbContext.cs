@@ -19,6 +19,43 @@ namespace LeaveManagement.Infrastructure.Data
 
         public DbSet<LeaveType> LeaveTypes { get; set; }
         public DbSet<WorkLeaveRequest> LeaveRequests { get; set; }
+        public DbSet<ExceptionLog> ExceptionLogs { get; set; }
+        public DbSet<UserActionLog> UserActionLogs { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<LeaveType>().HasData(
+                    new LeaveType
+                    {
+                        Id = 1,
+                        Name = "Annual Leave",
+                        DefaultDays = 30,
+                        CreatedBy = "system",
+                        CreatedDate = DateTime.UtcNow,
+                        IsDeleted = false
+                    },
+                    new LeaveType
+                    {
+                        Id = 2,
+                        Name = "Sick Leave",
+                        DefaultDays = 1,
+                        CreatedBy = "system",
+                        CreatedDate = DateTime.UtcNow,
+                        IsDeleted = false
+                    },
+                    new LeaveType
+                    {
+                        Id = 3,
+                        Name = "Maternity Leave",
+                        DefaultDays = 45,
+                        CreatedBy = "system",
+                        CreatedDate = DateTime.UtcNow,
+                        IsDeleted = false
+                    }
+                );
+        }
 
     }
 }
