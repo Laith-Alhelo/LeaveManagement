@@ -1,15 +1,19 @@
 using LeaveManagement.Infrastructure.Data;
 using LeaveManagement.Infrastructure.Identity;
+using LeaveManagement.WebUI.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using LeaveManagement.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddApplication();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-var app = builder.Build();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 builder.Services
     .AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -17,6 +21,10 @@ builder.Services
         options.SignIn.RequireConfirmedAccount = false;
     })
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -28,6 +36,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseExceptionHandling();
 
 app.UseRouting();
 
