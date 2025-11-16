@@ -4,6 +4,7 @@ using LeaveManagement.WebUI.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LeaveManagement.Application;
+using LeaveManagement.Infrastructure.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddApplication();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IExceptionLogger, ExceptionLogger>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -38,7 +40,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseExceptionHandling();
-
+app.UseMiddleware<CentralizedExceptionHandling>();
 app.UseRouting();
 
 app.UseAuthorization();

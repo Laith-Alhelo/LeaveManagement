@@ -22,6 +22,7 @@ namespace LeaveManagement.Infrastructure.Data
         public DbSet<ExceptionLog> ExceptionLogs { get; set; }
         public DbSet<UserActionLog> UserActionLogs { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

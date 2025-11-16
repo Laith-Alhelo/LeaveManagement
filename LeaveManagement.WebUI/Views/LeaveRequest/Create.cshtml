@@ -9,9 +9,9 @@
 <form asp-action="Create" method="post" class="mt-4">
 
     <div class="mb-3">
-        <label asp-for="LeaveTypes" class="form-label"></label>
-        <select asp-for="LeaveTypes" asp-items="Model.LeaveTypes" class="form-select"></select>
-        <span asp-validation-for="LeaveTypes" class="text-danger"></span>
+        <label asp-for="LeaveTypeId" class="form-label"></label>
+        <select asp-for="LeaveTypeId" asp-items="Model.LeaveTypes" class="form-select"></select>
+        <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
@@ -20,6 +20,8 @@
         <span asp-validation-for="StartDate" class="text-danger"></span>
     </div>
 
+
+
     <div class="mb-3">
         <label asp-for="EndDate" class="form-label"></label>
         <input asp-for="EndDate" class="form-control" />
@@ -27,9 +29,10 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="reason" class="form-label"></label>
-        <textarea asp-for="reason" class="form-control" rows="3"></textarea>
-        <span asp-validation-for="reason" class="text-danger"></span>
+        <label asp-for="Reason" class="form-label"></label>
+<textarea asp-for="Reason" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Reason" class="text-danger"></span>
+
     </div>
 
     <button type="submit" class="btn btn-primary">Submit Request</button>
