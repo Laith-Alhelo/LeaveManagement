@@ -12,19 +12,26 @@ Built using Clean Architecture principles with EF Core (Code-First) and ASP.NET 
 - View all previously submitted requests
 - Filter & sort requests by status and date
 - Delete leave requests while they are still **Pending**
+![alt text](image-2.png)
 
+![alt text](image-3.png)
+
+![alt text](image-4.png)
 ### Manager
 - View all employee leave requests
 - Approve or reject pending requests
 - Filter and sort by status and date
+![alt text](image-1.png)
 
 ### System-Wide
 - Centralized exception handling middleware
+![alt text](image.png)
 - Role-based authorization (Employee / Manager)
 - Custom exception logger
 - Email service abstraction (SMTP implementation)
 - Clean modular structure: Application, Infrastructure, WebUI
 
+![alt text](image-5.png)
 ---
 
 ##  Tech Stack
