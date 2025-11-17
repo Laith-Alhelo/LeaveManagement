@@ -34,6 +34,7 @@ namespace LeaveManagement.Application.Features.Handlers
                 throw new ArgumentException("Invalid leave type.");
             }
 
+            var user = _context.Users.Where(u => u.Id == request.EmployeeId).FirstOrDefault();
             var entity = new WorkLeaveRequest
             {
                 EmployeeId = request.EmployeeId,
@@ -42,7 +43,7 @@ namespace LeaveManagement.Application.Features.Handlers
                 Reason = request.Reason,
                 EndDate = request.EndDate,
                 CreatedDate = DateTime.UtcNow,
-                CreatedBy = request.EmployeeId.ToString(),
+                CreatedBy = user?.FirstName +" "+user?.LastName,
                 Status = LeaveStatus.Pending,
             };
             _context.LeaveRequests.Add(entity);

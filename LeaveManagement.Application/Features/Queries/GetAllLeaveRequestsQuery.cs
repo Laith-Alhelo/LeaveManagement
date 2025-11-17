@@ -22,7 +22,8 @@ public class ManagerLeaveRequestDto
     public LeaveStatus Status { get; set; }
     public DateTime EndDate { get; set; }
     public DateTime StartDate { get; set; }
-
+    
+    public string? Reason { get; set; }
     public string StatusText => Status.ToString();
 }
 }

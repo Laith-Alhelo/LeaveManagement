@@ -34,7 +34,7 @@ namespace LeaveManagement.Application.Features.Handlers
                             r.StartDate,
                             r.EndDate,
                             r.Status,
-                            
+                            r.Reason
                         };
 
             if (request.Status.HasValue)
@@ -58,7 +58,8 @@ namespace LeaveManagement.Application.Features.Handlers
                 LeaveTypeName = x.LeaveTypeName,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
-                Status = x.Status
+                Status = x.Status,
+                Reason = x.Reason
             }).ToListAsync(cancellationToken);
         }
     }

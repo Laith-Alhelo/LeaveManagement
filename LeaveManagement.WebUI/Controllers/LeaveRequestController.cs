@@ -95,6 +95,21 @@ namespace LeaveManagement.WebUI.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            int EmployeeId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var result = await mediator.Send(new DeleteLeaveRequestCommand
+            {
+                Id = id,
+                EmployeeId = EmployeeId
+            });
+
+         
+
+            return RedirectToAction(nameof(MyRequests));
+        }
 
     }
 }
