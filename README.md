@@ -3,6 +3,7 @@
  ASP.NET Core MVC Internal application that allows employees to submit leave requests and managers to review, approve, or reject them.  
 Built using Clean Architecture principles with EF Core (Code-First) and ASP.NET Core Identity.
 
+Live Demo : https://leavemanagement-baf7e4bffxeeepcr.eastasia-01.azurewebsites.net/
 ---
 
 ##  Features
