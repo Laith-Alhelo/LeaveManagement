@@ -5,7 +5,7 @@ Built using Clean Architecture principles with EF Core (Code-First) and ASP.NET 
 
 ---
 
-## 📌 Features
+##  Features
 
 ### Employee
 - Submit new leave requests
@@ -27,7 +27,7 @@ Built using Clean Architecture principles with EF Core (Code-First) and ASP.NET 
 
 ---
 
-## 🧰 Tech Stack
+##  Tech Stack
 
 - **ASP.NET Core 8 MVC**
 - **Entity Framework Core (Code First)**
@@ -38,10 +38,39 @@ Built using Clean Architecture principles with EF Core (Code-First) and ASP.NET 
 
 ---
 
-## 🚀 Getting Started
 
 ### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Laith-Alhelo/LeaveManagement.git
 cd EmployeeLeaveManagement
+
+### 2. Configure the connection string
+
+Inside LeaveManagement.WebUI/appsettings.json:
+
+"ConnectionStrings": {
+  "DefaultConnection": "Server=.;Database=EmployeeLeaveDb;Trusted_Connection=True;TrustServerCertificate=True;"
+}
+
+### 3.Apply EF Core migrations
+
+Using the .NET CLI:
+
+dotnet ef database update \
+  --project LeaveManagement.Infrastructure \
+  --startup-project LeaveManagement.WebUI
+
+### 4.Default Roles & Seed Users
+
+The system seeds default Identity roles and accounts at startup.
+Note : You can create your own user after Login using the Manager email and password
+Roles & Seed Users
+Employee
+Email = "laithhelo13@gmail.com"
+pass ="Employee@123!"
+Manager
+Email = "layanuhj1233@gmail.com",
+pass ="Manager@123!"
+
+
