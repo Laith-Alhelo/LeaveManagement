@@ -1,0 +1,70 @@
+﻿@model LeaveManagement.WebUI.Models.MyLeaveRequestsViewModel
+
+@{
+    ViewData["Title"] = "My Leave Requests";
+}
+
+<div class="container mt-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>My Leave Requests</h3>
+        <a asp-action="Create" class="btn btn-primary">
+            Create Leave Request
+        </a>
+    </div>
+
+    <form method="get" class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <select asp-for="SelectedStatus"
+                    asp-items="Model.StatusOptions"
+                    class="form-select">
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Sort By</label>
+            <select asp-for="SortOrder"
+                    asp-items="Model.SortOptions"
+                    class="form-select">
+            </select>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary me-2">Apply</button>
+            <a asp-action="MyRequests" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
+
+    @if (Model.Requests != null && Model.Requests.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Requests)
+                    {
+                        <tr>
+                            <td>@item.LeaveTypeName</td>
+                            <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+                            <td>@item.EndDate.ToString("yyyy-MM-dd")</td>
+                            <td>@item.StatusText</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>No leave requests found.</p>
+    }
+
+</div>
