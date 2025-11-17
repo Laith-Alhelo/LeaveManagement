@@ -1,26 +1,165 @@
-﻿@model List<LeaveManagement.Application.Features.Queries.ManagerLeaveRequestDto>
+﻿@model LeaveManagement.WebUI.Models.LeaveRequestsDashboardViewModel
+@using LeaveManagement.Domain.Enums
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Pending Leave Requests";
-    @functions {
-        string GetStatusClass(string status)
-        {
-            return status.ToLower() switch
-            {
-                "approved" => "status-approved",
-                "rejected" => "status-rejected",
-                "pending" => "status-pending",
-                _ => ""
-            };
-        }
-    }
 }
 
-<div class="container mt-3">
+
+    <style>
+        body {
+            color: #f5f5f5;
+        }
+
+        .manager-dashboard-page {
+            padding-top: 10px;
+        }
+
+        .status-card {
+            border-radius: 14px;
+            border: 1px solid #2b2b36;
+            background: linear-gradient(145deg, #181820, #14141a);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            color: #f5f5f5;
+        }
+
+            .status-card h6 {
+                font-size: 0.9rem;
+                letter-spacing: .04em;
+                text-transform: uppercase;
+                color: #b0b3c1;
+            }
+
+            .status-card h3 {
+                font-size: 1.8rem;
+                font-weight: 700;
+                margin: 0;
+            }
+
+        .status-card-total {
+            border-left: 4px solid #cba35c; 
+        }
+
+        .status-card-pending {
+            border-left: 4px solid #f8c146;
+        }
+
+        .status-card-approved {
+            border-left: 4px solid #4caf50;
+        }
+
+        .status-card-rejected {
+            border-left: 4px solid #f44336;
+        }
+
+        .filter-panel label {
+            color: #e3e3e3;
+        }
+
+        .filter-panel .form-select,
+        .filter-panel .form-control {
+            background-color: #181820;
+            color: #f5f5f5;
+            border-color: #303040;
+        }
+
+            .filter-panel .form-select:focus,
+            .filter-panel .form-control:focus {
+                box-shadow: 0 0 0 0.15rem rgba(203, 163, 92, 0.35);
+                border-color: #cba35c;
+            }
+
+        .btn-emaar {
+            background-color: #cba35c;
+            border-color: #cba35c;
+            color: #121212;
+            font-weight: 600;
+        }
+
+            .btn-emaar:hover {
+                background-color: #e0b96d;
+                border-color: #e0b96d;
+                color: #121212;
+            }
+
+        .dashboard-table {
+            color: #f5f5f5;
+            border-color: #2c2c38;
+        }
+
+            .dashboard-table thead {
+                background-color: #181820;
+                border-bottom: 1px solid #2f2f3b;
+            }
+
+                .dashboard-table thead th {
+                    border-bottom: none;
+                    color: #c0c3d1;
+                }
+
+            .dashboard-table tbody tr {
+                background-color: #15151d;
+            }
+
+                .dashboard-table tbody tr:nth-child(even) {
+                    background-color: #101018;
+                }
+
+                .dashboard-table tbody tr:hover {
+                    background-color: #222231;
+                }
+
+            .dashboard-table td,
+            .dashboard-table th {
+                border-color: #262633;
+            }
+    </style>
+
+
+<div class="container mt-3 manager-dashboard-page">
 
     <h3 class="mb-4">Leave Requests (Manager View)</h3>
 
-    <form method="get" class="row g-3 mb-3">
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3 mb-md-0">
+            <div class="card text-center status-card status-card-total">
+                <div class="card-body">
+                    <h6 class="card-title">Total</h6>
+                    <h3>@Model.TotalCount</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3 mb-md-0">
+            <div class="card text-center status-card status-card-pending">
+                <div class="card-body">
+                    <h6 class="card-title">Pending</h6>
+                    <h3>@Model.PendingCount</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3 mb-md-0">
+            <div class="card text-center status-card status-card-approved">
+                <div class="card-body">
+                    <h6 class="card-title">Approved</h6>
+                    <h3>@Model.ApprovedCount</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center status-card status-card-rejected">
+                <div class="card-body">
+                    <h6 class="card-title">Rejected</h6>
+                    <h3>@Model.RejectedCount</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="get" class="row g-3 mb-3 filter-panel">
         <div class="col-md-4">
             <label class="form-label">Status</label>
             <select name="status" class="form-select" asp-items="ViewBag.StatusOptions"></select>
@@ -32,47 +171,42 @@
         </div>
 
         <div class="col-md-4 d-flex align-items-end">
-            <button type="submit" class="btn-emaar btn btn-primary me-2">Apply</button>
-            <a href="/LeaveApproval/AllRequests" class="btn btn-secondary btn-emaar">Reset</a>
+            <button type="submit" class="btn btn-emaar me-2">Apply</button>
+            <a href="/LeaveApproval/AllRequests" class="btn btn-outline-light">Reset</a>
         </div>
     </form>
 
     <div class="table-responsive">
-        <table class="table table-emaar table-hover align-middle">
+        <table class="table align-middle dashboard-table">
             <thead>
                 <tr>
-                    <th>Employee</th>
                     <th>Leave Type</th>
-                    <th>Start</th>
-                    <th>End</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Reason</th>
                     <th>Status</th>
-                    <th style="width:160px;">Actions</th>
+                    <th style="width: 170px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var req in Model)
+                @foreach (var item in Model.Requests)
                 {
                     <tr>
-                        <td>@req.EmployeeName</td>
-                        <td>@req.LeaveTypeName</td>
-                        <td>@req.StartDate.ToString("yyyy-MM-dd")</td>
-                        <td>@req.EndDate.ToString("yyyy-MM-dd")</td>
-                        <td class="@GetStatusClass(req.StatusText)">@req.StatusText</td>
+                        <td>@item.LeaveTypeName</td>
+                        <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.EndDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.Reason</td>
 
+                        <td>@item.Status</td>
                         <td>
-                            @if (req.StatusText == "Pending")
+                            @if (item.Status == LeaveStatus.Pending)
                             {
-                                <form method="post" asp-action="Approve" asp-route-id="@req.Id" class="d-inline">
-                                    <button class="btn btn-success btn-sm">Approve</button>
+                                <form asp-action="Approve" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-success">Approve</button>
                                 </form>
-
-                                <form method="post" asp-action="Reject" asp-route-id="@req.Id" class="d-inline ms-1">
-                                    <button class="btn btn-danger btn-sm">Reject</button>
+                                <form asp-action="Reject" asp-route-id="@item.Id" method="post" class="d-inline ms-1">
+                                    <button type="submit" class="btn btn-sm btn-danger">Reject</button>
                                 </form>
-                            }
-                            else
-                            {
-                                <span class="text-muted">No Actions</span>
                             }
                         </td>
                     </tr>

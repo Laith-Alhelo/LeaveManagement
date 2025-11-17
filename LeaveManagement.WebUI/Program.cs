@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LeaveManagement.Application;
 using LeaveManagement.Infrastructure.Logging;
+using LeaveManagement.Application.Common.Interfaces;
+using LeaveManagement.Common.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 builder.Services.AddScoped<IExceptionLogger, ExceptionLogger>();
+builder.Services.AddTransient<IEmailService, SmtpEmailService>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
