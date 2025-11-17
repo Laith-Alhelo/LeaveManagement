@@ -17,6 +17,9 @@ body {
     .navbar-emaar .nav-link {
         color: var(--emaar-white) !important;
     }
+        .navbar-brand{
+            color: var(--emaar-gold) !important;
+        }
 
         .navbar-emaar .nav-link:hover,
         .navbar-emaar .navbar-brand:hover {
@@ -35,4 +38,49 @@ body {
     background-color: var(--emaar-gold);
     border: none;
     color: var(--emaar-black);
+}
+
+
+.table-emaar {
+    color: #f2f2f2 !important;
+    background-color: #1A1A1A !important;
+}
+
+/*.table-emaar thead {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+}*/
+
+.table-emaar tbody tr {
+    border-bottom: 1px solid #333 !important;
+}
+
+    .table-emaar tbody tr:hover {
+        /*        background-color: #2d2d2d !important;*/
+        color: white !important
+    }
+
+.table-emaar td,
+.table-emaar th {
+    border-color: #333 !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #1d1d1d !important;
+}
+
+
+.status-approved {
+    color: #28a745 !important;
+    font-weight: 600;
+}
+
+.status-rejected {
+    color: #dc3545 !important;
+    font-weight: 600;
+}
+
+.status-pending {
+    color: #ffc107 !important;
+    font-weight: 600;
 }

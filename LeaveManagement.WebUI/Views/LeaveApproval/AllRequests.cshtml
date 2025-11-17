@@ -1,0 +1,84 @@
+﻿@model List<LeaveManagement.Application.Features.Queries.ManagerLeaveRequestDto>
+
+@{
+    ViewData["Title"] = "Pending Leave Requests";
+    @functions {
+        string GetStatusClass(string status)
+        {
+            return status.ToLower() switch
+            {
+                "approved" => "status-approved",
+                "rejected" => "status-rejected",
+                "pending" => "status-pending",
+                _ => ""
+            };
+        }
+    }
+}
+
+<div class="container mt-3">
+
+    <h3 class="mb-4">Leave Requests (Manager View)</h3>
+
+    <form method="get" class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select" asp-items="ViewBag.StatusOptions"></select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Sort</label>
+            <select name="sortOrder" class="form-select" asp-items="ViewBag.SortOptions"></select>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn-emaar btn btn-primary me-2">Apply</button>
+            <a href="/LeaveApproval/AllRequests" class="btn btn-secondary btn-emaar">Reset</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-emaar table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Leave Type</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Status</th>
+                    <th style="width:160px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var req in Model)
+                {
+                    <tr>
+                        <td>@req.EmployeeName</td>
+                        <td>@req.LeaveTypeName</td>
+                        <td>@req.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>@req.EndDate.ToString("yyyy-MM-dd")</td>
+                        <td class="@GetStatusClass(req.StatusText)">@req.StatusText</td>
+
+                        <td>
+                            @if (req.StatusText == "Pending")
+                            {
+                                <form method="post" asp-action="Approve" asp-route-id="@req.Id" class="d-inline">
+                                    <button class="btn btn-success btn-sm">Approve</button>
+                                </form>
+
+                                <form method="post" asp-action="Reject" asp-route-id="@req.Id" class="d-inline ms-1">
+                                    <button class="btn btn-danger btn-sm">Reject</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Actions</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

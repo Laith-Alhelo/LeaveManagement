@@ -51,7 +51,20 @@ namespace LeaveManagement.WebUI.Controllers
                 if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     return Redirect(model.ReturnUrl);
 
-                return RedirectToAction("Index", "Home");
+                if (await _userManager.IsInRoleAsync(user, "Admin"))
+                {
+                    return RedirectToAction("Index", "AdminDashboard");
+                }
+
+                if (await _userManager.IsInRoleAsync(user, "Manager"))
+                {
+                    return RedirectToAction("AllRequests", "LeaveApproval");
+                }
+
+                if (await _userManager.IsInRoleAsync(user, "Employee"))
+                {
+                    return RedirectToAction("MyRequests", "LeaveRequest");
+                }
             }
 
             if (result.IsLockedOut)
@@ -66,11 +79,10 @@ namespace LeaveManagement.WebUI.Controllers
             return View(model);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction( "Login");
         }
 
         public IActionResult AccessDenied()

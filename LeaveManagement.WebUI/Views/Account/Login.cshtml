@@ -1,6 +1,7 @@
 ﻿@model LeaveManagement.WebUI.Models.LoginViewModel
 
 @{
+    Layout = "_AuthLayout";
     ViewData["Title"] = "Login";
 }
 
@@ -41,7 +42,7 @@
                     <label asp-for="RememberMe" class="form-check-label"></label>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <button type="submit" class="btn btn-primary btn-emaar w-100">Login</button>
             </form>
         </div>
 

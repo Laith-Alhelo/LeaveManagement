@@ -20,5 +20,11 @@ namespace LeaveManagement.Domain.Entities
         public DateTime DateRequested { get; set; } = DateTime.UtcNow;
         public string? ManagerComments { get; set; }
         public string Reason { get; set; } = null!;
+        public string? FirstName { get; set; }
+        public string? LastName
+        {
+            get; set;
+        }
+
     }
 }

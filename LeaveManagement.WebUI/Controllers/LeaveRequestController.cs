@@ -1,14 +1,16 @@
 ﻿using LeaveManagement.Application.Features.Commands;
 using LeaveManagement.Application.Features.Queries;
+using LeaveManagement.Domain.Enums;
 using LeaveManagement.WebUI.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
 namespace LeaveManagement.WebUI.Controllers
 {
-    //[Authorize(Roles = "Employee")]
+    [Authorize(Roles = "Employee")]
     public class LeaveRequestController : Controller
     {
         private readonly IMediator mediator;
@@ -54,5 +56,45 @@ namespace LeaveManagement.WebUI.Controllers
 
             return RedirectToAction("MyRequests");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> MyRequests(LeaveStatus? SelectedStatus, string? SortOrder)
+        {
+            int employeeId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var query = new GetMyLeaveRequestsQuery
+            {
+                EmployeeId = employeeId,
+                Status = SelectedStatus,
+                SortOrder = SortOrder
+            };
+
+            var requests = await mediator.Send(query);
+
+            var model = new MyLeaveRequestsViewModel
+            {
+                SelectedStatus = SelectedStatus,
+                SortOrder = string.IsNullOrEmpty(SortOrder) ? "date_asc" : SortOrder,
+                Requests = requests,
+                StatusOptions = new List<SelectListItem>
+        {
+            new SelectListItem("All", "", !SelectedStatus.HasValue),
+            new SelectListItem("Pending", LeaveStatus.Pending.ToString(), SelectedStatus == LeaveStatus.Pending),
+            new SelectListItem("Approved", LeaveStatus.Approved.ToString(), SelectedStatus == LeaveStatus.Approved),
+            new SelectListItem("Rejected", LeaveStatus.Rejected.ToString(), SelectedStatus == LeaveStatus.Rejected)
+        },
+                SortOptions = new List<SelectListItem>
+        {
+            new SelectListItem("Start Date (Oldest First)", "date_asc", SortOrder == "date_asc" || string.IsNullOrEmpty(SortOrder)),
+            new SelectListItem("Start Date (Newest First)", "date_desc", SortOrder == "date_desc"),
+            new SelectListItem("Status (A–Z)", "status_asc", SortOrder == "status_asc"),
+            new SelectListItem("Status (Z–A)", "status_desc", SortOrder == "status_desc")
+        }
+            };
+
+            return View(model);
+        }
+
+
     }
 }
