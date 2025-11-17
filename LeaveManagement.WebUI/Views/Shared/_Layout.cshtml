@@ -36,7 +36,7 @@
 
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            if (User.IsInRole("Employee"))
+                            if (User.IsInRole("Employee") || User.IsInRole("Admin"))
                             {
                                         <li class="nav-item">
                                             <a class="nav-link" asp-controller="LeaveRequest" asp-action="Create">
@@ -50,16 +50,16 @@
                                         </li>
                             }
 
-                            if (User.IsInRole("Manager"))
+                            if (User.IsInRole("Manager") || User.IsInRole("Admin"))
                             {
                                         <li class="nav-item">
-                                                            <a class="nav-link" asp-controller="LeaveApproval" asp-action="AllRequests">
+                                            <a class="nav-link" asp-controller="LeaveApproval" asp-action="AllRequests">
                                                 Manage Requests
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                                    <a class="nav-link" asp-controller="LeaveApproval" asp-action="Dashboard">
-                                                Dashboard
+                                    <a class="nav-link" asp-controller="AdminUsers" asp-action="Create">
+                                                 Create User
                                             </a>
                                         </li>
                             }
