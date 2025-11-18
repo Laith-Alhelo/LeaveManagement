@@ -7,6 +7,7 @@ using LeaveManagement.Application;
 using LeaveManagement.Infrastructure.Logging;
 using LeaveManagement.Application.Common.Interfaces;
 using LeaveManagement.Common.Services;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,9 +40,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var configuration = services.GetRequiredService<IConfiguration>();
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
     var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
-    await IdentitySeeder.SeedAsync(userManager, roleManager);
+    await IdentitySeeder.SeedAsync(services, configuration);
 }
 
 // Configure the HTTP request pipeline.
