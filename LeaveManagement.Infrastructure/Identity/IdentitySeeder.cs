@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,42 +12,52 @@ namespace LeaveManagement.Infrastructure.Identity
     public static class IdentitySeeder
     {
         public static async Task SeedAsync(
-            UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager)
+            IServiceProvider serviceProvider,
+            IConfiguration config)
         {
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
             await EnsureRole(roleManager, "Admin");
             await EnsureRole(roleManager, "Manager");
             await EnsureRole(roleManager, "Employee");
 
-            var admin = new ApplicationUser
-            {
-                UserName = "admin@Emaar.com",
-                Email = "admin@Emaar.com",
-                FirstName = "Laith",
-                LastName = "Admin",
-                EmailConfirmed = true
-            };
-            await EnsureUser(userManager, admin, "Admin@123!", "Admin");
+            await SeedUser(config, userManager, "Admin");
+            await SeedUser(config, userManager, "Manager");
+            await SeedUser(config, userManager, "Employee");
+        }
 
-            var manager = new ApplicationUser
-            {
-                UserName = "layanuhj1233@gmail.com",
-                Email = "layanuhj1233@gmail.com",
-                FirstName = "layan",
-                LastName = "Alhelo",
-                EmailConfirmed = true
-            };
-            await EnsureUser(userManager, manager, "Manager@123!", "Manager");
+        private static async Task SeedUser(
+            IConfiguration config,
+            UserManager<ApplicationUser> userManager,
+            string role)
+        {
+            var email = config[$"IdentitySeed:{role}:Email"];
+            var password = config[$"IdentitySeed:{role}:Password"];
 
-            var employee = new ApplicationUser
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                return;
+
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
             {
-                UserName = "laithhelo13@gmail.com",
-                Email = "laithhelo13@gmail.com",
-                FirstName = "Yazan",
-                LastName = "Alhelo",
-                EmailConfirmed = true
-            };
-            await EnsureUser(userManager, employee, "Employee@123!", "Employee");
+                user = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    FirstName = role,
+                    LastName = "User",
+                    EmailConfirmed = true
+                };
+
+                var result = await userManager.CreateAsync(user, password);
+
+                if (!result.Succeeded)
+                    return;
+            }
+
+            if (!await userManager.IsInRoleAsync(user, role))
+                await userManager.AddToRoleAsync(user, role);
         }
 
         private static async Task EnsureRole(RoleManager<ApplicationRole> roleManager, string roleName)
@@ -53,26 +65,6 @@ namespace LeaveManagement.Infrastructure.Identity
             if (!await roleManager.RoleExistsAsync(roleName))
                 await roleManager.CreateAsync(new ApplicationRole(roleName));
         }
-
-        private static async Task EnsureUser(
-            UserManager<ApplicationUser> userManager,
-            ApplicationUser user,
-            string password,
-            string role)
-        {
-            var existing = await userManager.FindByEmailAsync(user.Email!);
-            if (existing != null)
-            {
-                if (!await userManager.IsInRoleAsync(existing, role))
-                    await userManager.AddToRoleAsync(existing, role);
-                return;
-            }
-
-            var result = await userManager.CreateAsync(user, password);
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(user, role);
-            }
-        }
     }
+
 }
