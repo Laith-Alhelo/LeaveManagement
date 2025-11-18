@@ -63,33 +63,6 @@
                                             </a>
                                         </li>
                             }
-
-                            if (User.IsInRole("Admin"))
-                            {
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown"
-                                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        Dashboard
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                                                <li>
-                                                    <a class="dropdown-item" asp-controller="Admin" asp-action="Index">
-                                                        Admin Home
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" asp-controller="Admin" asp-action="Users">
-                                                        Users / Roles
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" asp-controller="Admin" asp-action="Logs">
-                                                        System Logs
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                            }
                         }
                     </ul>
 

@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace LeaveManagement.WebUI.Controllers
 {
-    [Authorize(Roles = "Employee")]
+    [Authorize(Roles = "Employee,Admin")]
     public class LeaveRequestController : Controller
     {
         private readonly IMediator mediator;
