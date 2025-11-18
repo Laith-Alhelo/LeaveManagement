@@ -69,7 +69,7 @@ namespace LeaveManagement.Application.Features.Handlers
 
                         Login details:
                         - Username: {request.Email}
-                        - Temporary password: {request.Password}
+                        - Your password: {request.Password}
 
                         Please log in and change your password.
 

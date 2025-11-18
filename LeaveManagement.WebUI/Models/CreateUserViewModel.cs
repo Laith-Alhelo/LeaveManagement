@@ -17,11 +17,13 @@ namespace LeaveManagement.WebUI.Models
 
         [Required]
         [Display(Name = "Role")]
-        public string Role { get; set; } = "Employee"; 
+        public string Role { get; set; } = "Employee";
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Temporary Password")]
-        public string Password { get; set; } = "Temp@12345";
+        [Display(Name = "Password")]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$",
+        ErrorMessage = "Password must contain at least 6 characters, including uppercase, lowercase, number, and special character (!@#$%^&*).")]
+        public string Password { get; set; } = string.Empty;
     }
 }
